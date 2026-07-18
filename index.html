@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tarot Rosa</title>
+<style>
+html,body{margin:0;height:100%;overflow:hidden;font-family:Arial,sans-serif;background:#ffd9ec}
+canvas{position:fixed;inset:0}
+#ui{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%}
+.card{width:240px;height:360px;border-radius:20px;background:#fff;color:#d63384;
+display:flex;flex-direction:column;align-items:center;justify-content:center;
+box-shadow:0 8px 25px rgba(0,0,0,.2);padding:20px;text-align:center}
+button{margin-top:20px;padding:12px 24px;border:none;border-radius:30px;background:#ff4fa3;color:#fff;font-size:18px;cursor:pointer}
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+<div id="ui">
+<h1>🌸 Tarot Rosa ✨</h1>
+<div class="card">
+<h2 id="n">Pulsa el botón</h2>
+<div id="e" style="font-size:70px">🃏</div>
+<p id="m">Descubre tu mensaje.</p>
+</div>
+<button onclick="draw()">✨ Sacar carta ✨</button>
+</div>
+<script>
+const c=document.getElementById('bg'),x=c.getContext('2d');
+function rs(){c.width=innerWidth;c.height=innerHeight}rs();onresize=rs;
+const stars=[...Array(100)].map(()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:Math.random()*2+1,a:Math.random()}));
+const sak=[...Array(25)].map(()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,s:10+Math.random()*10,v:0.6+Math.random()}));
+function flower(px,py,s){x.save();x.translate(px,py);for(let i=0;i<5;i++){x.rotate(Math.PI*2/5);x.beginPath();x.ellipse(0,-s/2,s/4,s/1.7,0,0,6.28);x.fillStyle='#ffd1e8';x.fill()}x.beginPath();x.arc(0,0,s/6,0,6.28);x.fillStyle='#ffd54d';x.fill();x.restore();}
+(function anim(){x.clearRect(0,0,c.width,c.height);x.fillStyle='#fff';stars.forEach(t=>{x.globalAlpha=(Math.sin(t.a+=.03)+1)/2;x.beginPath();x.arc(t.x,t.y,t.r,0,6.28);x.fill()});x.globalAlpha=1;sak.forEach(f=>{flower(f.x,f.y,f.s);f.y+=f.v;f.x+=Math.sin(f.y/30);if(f.y>innerHeight+20){f.y=-20;f.x=Math.random()*innerWidth}});requestAnimationFrame(anim)})();
+const cards=[
+['La Estrella','⭐','La esperanza ilumina tu camino.'],
+['El Sol','☀️','Éxito y alegría se acercan.'],
+['La Luna','🌙','Escucha tu intuición.'],
+['La Fuerza','🦁','Eres más fuerte de lo que crees.'],
+['El Mundo','🌎','Un ciclo termina con éxito.'],
+['El Mago','✨','Tienes el poder de crear.']
+];
+function draw(){let c=cards[Math.floor(Math.random()*cards.length)];
+n.textContent=c[0];e.textContent=c[1];m.textContent=c[2];}
+</script>
+</body></html>
